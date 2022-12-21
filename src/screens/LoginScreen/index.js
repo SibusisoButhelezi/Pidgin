@@ -50,6 +50,7 @@ const LoginScreen = () => {
         value={userName} 
         onChangeText={setUserName} 
         placeholder='username' 
+        placeholderTextColor={'black'}
         style={styles.input} 
         autoCapitalize="none"
         />
@@ -57,6 +58,7 @@ const LoginScreen = () => {
         value={password} 
         onChangeText={setPassword} 
         placeholder='password' 
+        placeholderTextColor='black'
         style={styles.input} 
         secureTextEntry
         />
@@ -89,6 +91,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         borderRadius: 5,
         backgroundColor: 'white',
+        color: 'black',
     }
 });
 

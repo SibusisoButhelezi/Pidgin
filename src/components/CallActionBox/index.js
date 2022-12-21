@@ -4,7 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
-const CallActionBox = () => {
+const CallActionBox = ({onHangupPress}) => {
     const [isCameraOn, setIsCameraOn] = useState(true);
     const [isMicOn, setIsMisOn] = useState(true);
 
@@ -17,9 +17,7 @@ const CallActionBox = () => {
     const onToggleMicrophone = () => {
         setIsMisOn(currentValue => !currentValue);
     }
-    const onHangup = () => {
-
-    }
+    
   return (
     <View style={styles.buttonsContainer}>
         <Pressable onPress={onReverseCamera} style={styles.iconButton}>
@@ -31,7 +29,7 @@ const CallActionBox = () => {
         <Pressable onPress={onToggleMicrophone} style={styles.iconButton}>
             <MaterialCommunityIcons name={isMicOn ? "microphone-off" : "microphone"} size={30} color={'white'} />
         </Pressable>
-        <Pressable onPress={onHangup} style={[styles.iconButton, {backgroundColor: 'red'}]}>
+        <Pressable onPress={onHangupPress} style={[styles.iconButton, {backgroundColor: 'red'}]}>
             <MaterialCommunityIcons name="phone-hangup" size={30} color={'white'} />
         </Pressable>
     </View>

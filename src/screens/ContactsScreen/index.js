@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, FlatList, Text, StyleSheet, TextInput, Pressable} from 'react-native';
+import { Voximplant } from 'react-native-voximplant';
 import { useNavigation } from '@react-navigation/native';
 import contacts from '../../../assets/data/contacts.json';
 
@@ -9,7 +10,18 @@ const ContactsScreen = () => {
   const [filteredContacts, setFilteredContacts] = useState(contacts); // This is to keep the contacts displayed dynamic
   
   const navigation = useNavigation();
-  
+  const voximplant = Voximplant.getInstance();
+
+  useEffect(() => {
+    voximplant.on(Voximplant.ClientEvents.IncomingCall, IncomingCallEvent => {
+      navigation.navigate('IncomingCall', {call: IncomingCallEvent.call});
+    });
+
+    return () => {
+      voximplant.off(Voximplant.ClientEvents.IncomingCall);
+    };
+  }, []);
+
   useEffect (() => {
       const newContacts = contacts.filter(
         contact => contact.user_display_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -33,6 +45,7 @@ const ContactsScreen = () => {
               onChangeText={setSearchTerm} 
               style={styles.searchInput} 
               placeholder="Search..." 
+              placeholderTextColor={"black"}
             />
             <FlatList 
             data = {filteredContacts}
@@ -60,8 +73,9 @@ const styles = StyleSheet.create({
       flex: 1,
     },
     contactName: {
-      fontSize: 22,
+      fontSize: 18,
       marginVertical: 6,
+      color: 'black',
     },
     separator: {
       width: '100%',
@@ -69,9 +83,11 @@ const styles = StyleSheet.create({
       backgroundColor: '#e0e0e0'
     },
     searchInput: {
-      backgroundColor: '#e0e0e0',
+      //backgroundColor: '#e0e0e0',
+      backgroundColor: 'lightgrey',
       padding: 4,
       borderRadius: 5,
+      color: 'black',
     }
   });
 

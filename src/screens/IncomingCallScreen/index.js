@@ -1,24 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Text, View, StyleSheet, ImageBackground, Pressable} from 'react-native';
 import background from '../../../assets/images/calling.jpg';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import {useRoute, useNavigation} from '@react-navigation/native'
+import { Voximplant } from 'react-native-voximplant';
 
 const IncomingCallScreen = () => {
+    const [caller, setCaller] = useState('');
+    const route = useRoute();
+    const {call} = route.params;
+    const navigation = useNavigation();
 
+    useEffect(() => {
+        setCaller(call.getEndpoints()[0].displayName);
+
+        call.on(Voximplant.CallEvents.Disconnected, callEvent => {
+            navigation.navigate('Contacts');
+        });
+
+        return () => {
+            call.off(Voximplant.CallEvents.Disconnected);
+        };
+    }, []);
+ 
     const onDecline = () => {
-        console.warn("on Decline");
+        call.decline();
     };
 
     const onAccept = () => {
-        console.warn("on Accept");
+        navigation.navigate('Calling', {call: call, isIncomingCall: true});
     };
     return(
         <ImageBackground source={background} style={styles.background} resizeMode="cover">
-            <Text style={styles.name} >Alex</Text>
+            <Text style={styles.name} >{caller}</Text>
             <Text style={styles.phoneNumber} >Pidgin Video...</Text>
             <View style={[styles.row, {marginTop: 'auto'}]}>
                 <View style={styles.iconContainer}>
